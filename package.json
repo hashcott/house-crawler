@@ -1,0 +1,17 @@
+{
+  "name": "nhadat",
+  "version": "1.0.0",
+  "description": "crawler data nhadat",
+  "main": "index.js",
+  "dependencies": {
+    "json2csv": "^5.0.1",
+    "nodemon": "^2.0.4",
+    "puppeteer": "^5.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "author": "Nguyen Hanh",
+  "license": "ISC"
+}
