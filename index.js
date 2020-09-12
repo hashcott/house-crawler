@@ -1,5 +1,6 @@
 const puppeteer = require("puppeteer");
 const fs = require("fs");
+const { Parser } = require("json2csv");
 const API = "http://www.batdongsan.vn";
 (async () => {
   var twirlTimer = (function () {
@@ -20,7 +21,7 @@ const API = "http://www.batdongsan.vn";
     return request.continue();
   });
   let allLinks = [];
-  for (let i = 1; i <= 150; i++) {
+  for (let i = 1; i <= 50; i++) {
     let links = await parserLinkInPage(i, page);
     allLinks = allLinks.concat(links);
   }
@@ -28,8 +29,16 @@ const API = "http://www.batdongsan.vn";
   for (let i = 0; i < allLinks.length; i++) {
     data.push(await getContent(page, allLinks[i]));
   }
-  fs.writeFileSync("data.json", JSON.stringify(data), "utf-8");
-  console.log("xong");
+  const fields = Object.keys(data[0]);
+  const opts = { fields };
+  try {
+    const parser = new Parser(opts);
+    const csv = parser.parse(data);
+    fs.writeFileSync("data.csv", JSON.stringify(csv), "utf-8");
+    console.log("crawler completed !!!");
+  } catch (err) {
+    console.error(err);
+  }
 })();
 
 const parserLinkInPage = async (pagination, page) => {
@@ -37,9 +46,12 @@ const parserLinkInPage = async (pagination, page) => {
   await page.goto(
     `${API}/giao-dich/ban-nha-dat-tai-ha-noi/pageindex-${pagination}.html`
   );
-
   if ((await page.$("body > pre")) !== null) {
     await page.goto("http://www.batdongsan.vn/default.aspx?removedos=true");
+    await page.goto(
+      `${API}/giao-dich/ban-nha-dat-tai-ha-noi/pageindex-${pagination}.html`
+    );
+  } else {
     await page.goto(
       `${API}/giao-dich/ban-nha-dat-tai-ha-noi/pageindex-${pagination}.html`
     );
@@ -62,7 +74,7 @@ const getContent = async (page, url) => {
   if ((await page.$("body > pre")) !== null) {
     await page.goto("http://www.batdongsan.vn/default.aspx?removedos=true");
     await page.goto(url);
-  }
+  } else await page.goto(url);
   let content = await page.evaluate(() => {
     // Function support
     function removeAccents(str) {
@@ -144,13 +156,25 @@ const getContent = async (page, url) => {
         attrs = { ...attrs, ...obj };
       });
     }
-    const moTa = document.querySelector(
-      "#Home1_ctl33_viewdetailproduct > div > div.row > div.PD_Gioithieu.col-md-7.col-md-pull-5"
+    let imgSrc = document.querySelector(
+      "#Home1_ctl24_viewdetailproduct > div > div > div > div.warp_images > div > div > div.owl-stage-outer > div > div.owl-item.active.center > div > a"
+    ).href;
+    let tenNguoiBan = document.querySelector(
+      "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.name > a"
+    ).innerText;
+    let emailNguoiBan = document.querySelector(
+      "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.email > a"
+    ).innerText;
+    let diaChiNguoiBan = document.querySelector(
+      "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.Addrees"
     ).innerText;
     return {
       ...infomation,
-      moTa,
       ...attrs,
+      imgSrc,
+      tenNguoiBan,
+      emailNguoiBan,
+      diaChiNguoiBan,
     };
   });
   return content;
