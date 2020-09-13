@@ -156,18 +156,41 @@ const getContent = async (page, url) => {
         attrs = { ...attrs, ...obj };
       });
     }
-    let imgSrc = document.querySelector(
+
+    let img1 = document.querySelector(
+      "#Home1_ctl24_viewdetailproduct > div > div > div > div.warp_images > div > div > div > a"
+    );
+    let img2 = document.querySelector(
       "#Home1_ctl24_viewdetailproduct > div > div > div > div.warp_images > div > div > div.owl-stage-outer > div > div.owl-item.active.center > div > a"
-    ).href;
+    );
+    let imgSrc = "";
+    if (img1) {
+      imgSrc = img1.href;
+    } else if (img2) {
+      imgSrc = img2.href;
+    }
+
     let tenNguoiBan = document.querySelector(
       "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.name > a"
-    ).innerText;
+    )
+      ? document.querySelector(
+          "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.name > a"
+        ).innerText
+      : "";
     let emailNguoiBan = document.querySelector(
       "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.email > a"
-    ).innerText;
+    )
+      ? document.querySelector(
+          "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.email > a"
+        ).innerText
+      : "";
     let diaChiNguoiBan = document.querySelector(
       "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.Addrees"
-    ).innerText;
+    )
+      ? document.querySelector(
+          "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.Addrees"
+        ).innerText
+      : "";
     return {
       ...infomation,
       ...attrs,
