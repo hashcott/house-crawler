@@ -202,6 +202,7 @@ const getContent = async (page, url) => {
       ...infomation,
       ...attrs,
       imgSrc,
+      moTa,
       tenNguoiBan,
       emailNguoiBan,
       diaChiNguoiBan,
