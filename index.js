@@ -191,6 +191,13 @@ const getContent = async (page, url) => {
           "#Home1_ctl41_viewdetailproduct > div > ul > li > div > div:nth-child(1) > div.content > div.Addrees"
         ).innerText
       : "";
+    let moTa = document.querySelector(
+      "#Home1_ctl33_viewdetailproduct > div > div.row > div.PD_Gioithieu.col-md-7.col-md-pull-5"
+    )
+      ? document.querySelector(
+          "#Home1_ctl33_viewdetailproduct > div > div.row > div.PD_Gioithieu.col-md-7.col-md-pull-5"
+        ).innerText
+      : "";
     return {
       ...infomation,
       ...attrs,
