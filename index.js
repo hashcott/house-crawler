@@ -29,16 +29,18 @@ const API = "http://www.batdongsan.vn";
   for (let i = 0; i < allLinks.length; i++) {
     data.push(await getContent(page, allLinks[i]));
   }
-  const fields = Object.keys(data[0]);
-  const opts = { fields };
-  try {
-    const parser = new Parser(opts);
-    const csv = parser.parse(data);
-    fs.writeFileSync("data.csv", JSON.stringify(csv), "utf-8");
-    console.log("crawler completed !!!");
-  } catch (err) {
-    console.error(err);
-  }
+  // const fields = Object.keys(data[0]);
+  // const opts = { fields };
+  // try {
+  //   const parser = new Parser(opts);
+  //   const csv = parser.parse(data);
+  //   fs.writeFileSync("data.csv", JSON.stringify(csv), "utf-8");
+  //   console.log("crawler completed !!!");
+  // } catch (err) {
+  //   console.error(err);
+  // }
+  fs.writeFileSync("data.json", JSON.stringify(data), "utf-8");
+  console.log("crawler completed !!!");
 })();
 
 const parserLinkInPage = async (pagination, page) => {
